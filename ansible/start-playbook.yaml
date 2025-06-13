@@ -45,13 +45,13 @@
         update_cache: yes
 
     - name: Generate OAUTH2_PROXY_COOKIE_SECRET
-        command: "openssl rand -base64 32"
-        register: cookie_secret_raw
-        changed_when: false
+      command: "openssl rand -base64 32"
+      register: cookie_secret_raw
+      changed_when: false
 
     - name: Strip newline from generated cookie secret
-        set_fact:
-          cookie_secret: "{{ cookie_secret_raw.stdout | trim }}"
+      set_fact:
+        cookie_secret: "{{ cookie_secret_raw.stdout | trim }}"
 
     - name: Check if OAUTH2_PROXY_COOKIE_SECRET already set
       shell: grep -q '^OAUTH2_PROXY_COOKIE_SECRET=' /tmp/docker/.env

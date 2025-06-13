@@ -71,23 +71,8 @@ jobs:
           rsync -av -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" ./docker/nginx/ ${{ secrets.VM_ADMIN_USERNAME }}@${{ env.PUBLIC_IP }}:/tmp/docker/nginx/
 
       - name: Run Ansible Playbook
-        uses: dawidd6/action-ansible-playbook@v2
+        uses: dawidd6/action-ansible-playbook@v3
         with:
           playbook: ansible/start-playbook.yaml
-          #inventory: |
-            #  [default]
-            # ${{ env.PUBLIC_IP }} ansible_user=${{ secrets.ANSIBLE_SSH_USER }} ansible_ssh_private_key_file=~/.ssh/id_rsa
-          extra_vars: |
-            public_ip=${{ env.PUBLIC_IP }}
-            keycloak_admin_user=${{ secrets.KEYCLOAK_ADMIN_USER }}
-            keycloak_admin_pass=${{ secrets.KEYCLOAK_ADMIN_PASS }}
-            docker_compose_version: "2.36.2"
-            compose_dir: "/opt/app"
-            KC_BOOTSTRAP_ADMIN_USERNAME=${{ secrets.KC_BOOTSTRAP_ADMIN_USERNAME }}
-            KC_BOOTSTRAP_ADMIN_PASSWORD=${{ secrets.KC_BOOTSTRAP_ADMIN_PASSWORD }}
-            KC_DB_USERNAME=${{ secrets.KC_DB_USERNAME }}
-            KC_DB_PASSWORD=${{ secrets.KC_DB_PASSWORD }}
-            KC_HOSTNAME=${{ env.PUBLIC_IP }}
-            KC_HOSTNAME_URL=http://${{ env.PUBLIC_IP }}:8080
-            POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          options: |
+            --extra-vars public_ip=${{ env.PUBLIC_IP }}, keycloak_admin_user=${{ secrets.KEYCLOAK_ADMIN_USER }}, keycloak_admin_pass=${{ secrets.KEYCLOAK_ADMIN_PASS }}, docker_compose_version="2.36.2", docker_compose_version="2.36.2", compose_dir="/opt/app", KC_BOOTSTRAP_ADMIN_USERNAME=${{ secrets.KC_BOOTSTRAP_ADMIN_USERNAME }}, KC_BOOTSTRAP_ADMIN_PASSWORD=${{ secrets.KC_BOOTSTRAP_ADMIN_PASSWORD }}, KC_DB_USERNAME=${{ secrets.KC_DB_USERNAME }}, KC_DB_PASSWORD=${{ secrets.KC_DB_PASSWORD }}, KC_HOSTNAME=${{ env.PUBLIC_IP }}, KC_HOSTNAME_URL=http://${{ env.PUBLIC_IP }}:8080, POSTGRES_USER=${{ secrets.POSTGRES_USER }}, POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} 
