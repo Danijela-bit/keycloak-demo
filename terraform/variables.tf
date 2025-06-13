@@ -114,6 +114,7 @@ variable "virtual_machine_admin_username" {
 
 variable "admin_ssh_key_username" {
   type    = string
+  default = "adminuser"
   description = "Admin SSH key username"
 }
 
