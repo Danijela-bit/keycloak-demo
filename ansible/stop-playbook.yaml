@@ -1,0 +1,49 @@
+---
+- name: Tear down Docker Compose stack and uninstall Docker
+  hosts: all
+
+  tasks:
+    - name: Stop and remove NGINX stack
+      community.docker.docker_compose_v2:
+        project_src: "/tmp/docker/"
+        files:
+          - docker-compose-nginx.yaml
+        remove_volumes: true
+        state: absent
+
+    - name: Stop and remove Keycloak stack
+      community.docker.docker_compose_v2:
+        project_src: "/tmp/docker/"
+        files:
+          - docker-compose-keycloak.yaml
+        remove_volumes: true
+        state: absent
+
+    - name: Uninstall Docker and Docker Compose
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose
+        state: absent
+        purge: yes
+
+    - name: Remove Docker APT repository
+      file:
+        path: /etc/apt/sources.list.d/docker.list
+        state: absent
+
+    - name: Remove Docker GPG key
+      file:
+        path: /etc/apt/keyrings/docker.asc
+        state: absent
+
+    - name: Remove Docker keyrings directory (if empty)
+      file:
+        path: /etc/apt/keyrings
+        state: absent
+
+    - name: Autoremove unused dependencies
+      apt:
+        autoremove: yes
