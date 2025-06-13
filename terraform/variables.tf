@@ -108,12 +108,18 @@ variable "virtual_machine_size" {
 
 variable "virtual_machine_admin_username" {
   type    = string
+  default = "adminuser"
   description = "Demo Azure virtual machine admin username"
+}
+
+variable "admin_ssh_key_username" {
+  type    = string
+  description = "Admin SSH key username"
 }
 
 variable "public_key" {
   type    = string
-  description = "SSH public key"
+  description = "SSH public key path"
 }
 
 variable "os_disk_caching" {
@@ -155,4 +161,28 @@ variable "source_image_reference_version" {
 output "public_ip" {
   description = "Public IP address of the Azure VM"
   value       = azurerm_linux_virtual_machine.keycloak_vm.public_ip_address
+}
+
+variable "storage_account_name" {
+  description = "The name of the storage account"
+  type        = string
+  default     = "keycloakdemostorageacc"
+}
+
+variable "account_tier" {
+  description = "The tier of the storage account"
+  type        = string
+  default     = "Standard"
+}
+
+variable "account_replication_type" {
+  description = "The replication type of the storage account"
+  type        = string
+  default     = "LRS"
+}
+
+variable "container_name" {
+  description = "The name of the storage container"
+  type        = string
+  default     = "keycloak-demo-storage-container"
 }
