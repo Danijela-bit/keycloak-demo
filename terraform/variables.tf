@@ -108,12 +108,18 @@ variable "virtual_machine_size" {
 
 variable "virtual_machine_admin_username" {
   type    = string
+  default = "adminuser"
   description = "Demo Azure virtual machine admin username"
+}
+
+variable "admin_ssh_key_username" {
+  type    = string
+  description = "Admin SSH key username"
 }
 
 variable "public_key" {
   type    = string
-  description = "SSH public key"
+  description = "SSH public key path"
 }
 
 variable "os_disk_caching" {

@@ -50,7 +50,7 @@ resource "azurerm_linux_virtual_machine" "keycloak_vm" {
 
    admin_ssh_key {
      username   = var.virtual_machine_admin_username
-     public_key = file(var.public_key)  
+     public_key = var.public_key
      }
 
   os_disk {
