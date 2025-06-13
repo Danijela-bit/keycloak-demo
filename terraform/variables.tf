@@ -162,27 +162,3 @@ output "public_ip" {
   description = "Public IP address of the Azure VM"
   value       = azurerm_linux_virtual_machine.keycloak_vm.public_ip_address
 }
-
-variable "storage_account_name" {
-  description = "The name of the storage account"
-  type        = string
-  default     = "keycloakdemostorageacc"
-}
-
-variable "account_tier" {
-  description = "The tier of the storage account"
-  type        = string
-  default     = "Standard"
-}
-
-variable "account_replication_type" {
-  description = "The replication type of the storage account"
-  type        = string
-  default     = "LRS"
-}
-
-variable "container_name" {
-  description = "The name of the storage container"
-  type        = string
-  default     = "keycloak-demo-storage-container"
-}
