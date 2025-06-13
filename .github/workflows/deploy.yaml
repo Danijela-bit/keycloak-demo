@@ -48,6 +48,11 @@ jobs:
         working-directory: ./terraform
         run: |
           echo "PUBLIC_IP=$(terraform output -raw public_ip)" >> $GITHUB_ENV
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Setup SSH
         run: |
