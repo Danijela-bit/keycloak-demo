@@ -66,15 +66,13 @@ jobs:
 
       - name: Copy files to Azure VM
         run: |
-          # rsync -av -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" ./ansible/ ${{ secrets.VM_ADMIN_USERNAME }}@${{ env.PUBLIC_IP }}:/tmp/ansible/
-          rsync -av -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" ./docker/docker-compose* ${{ secrets.VM_ADMIN_USERNAME }}@${{ env.PUBLIC_IP }}:/tmp/docker/
-          rsync -av -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" ./docker/nginx/ ${{ secrets.VM_ADMIN_USERNAME }}@${{ env.PUBLIC_IP }}:/tmp/docker/nginx/
+          rsync -av -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" ./docker/* ${{ secrets.VM_ADMIN_USERNAME }}@${{ env.PUBLIC_IP }}:/tmp/docker/
 
       - name: Run Ansible Playbook
         run: |
           cat <<EOF > inventory.ini
           [remote]
-          ${PUBLIC_IP} ansible_user=${{ secrets.VM_ADMIN_USERNAME }} ansible_ssh_private_key_file=~/.ssh/id_rsa
+          ${{ env.PUBLIC_IP }} ansible_user=${{ secrets.VM_ADMIN_USERNAME }} ansible_ssh_private_key_file=~/.ssh/id_rsa
           EOF
 
           ansible-playbook -i inventory.ini ./ansible/start-playbook.yaml \
