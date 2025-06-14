@@ -46,7 +46,7 @@
         update_cache: yes
 
     - name: Generate OAUTH2_PROXY_COOKIE_SECRET
-      command: "openssl rand -base64 32"
+      shell: "openssl rand -base64 32 | tr -- '+/' '-_'"
       register: cookie_secret_raw
       changed_when: false
 
@@ -54,18 +54,13 @@
       set_fact:
         cookie_secret: "{{ cookie_secret_raw.stdout | trim }}"
 
-    - name: Check if OAUTH2_PROXY_COOKIE_SECRET already set
-      shell: grep -q '^OAUTH2_PROXY_COOKIE_SECRET=' /tmp/docker/.env
-      register: cookie_secret_exists
-      ignore_errors: true
-
-    - name: Append OAUTH2_PROXY_COOKIE_SECRET to .env if not set
+    - name: Ensure env variable KC_HOSTNAME_URL in .env file exists or is updated
       lineinfile:
         path: /tmp/docker/.env
+        regexp: '^OAUTH2_PROXY_COOKIE_SECRET='
         line: "OAUTH2_PROXY_COOKIE_SECRET={{ cookie_secret }}"
         create: yes
         insertafter: EOF
-      when: cookie_secret_exists.rc != 0
 
     - name: Install Docker Compose
       apt:
