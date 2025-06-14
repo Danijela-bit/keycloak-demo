@@ -1,50 +1,25 @@
-name: Deploy Infrastructure and App
+name: Apply Changes to Deployment
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
-  deploy:
-    name: Deploy Azure VM and Application
+  apply-changes:
+    name: Stop & Start Containers via Ansible
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform Init
-        working-directory: ./terraform
-        run: terraform init
-        env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-
-      - name: Terraform Apply
-        id: apply
-        working-directory: ./terraform
-        run: |
-          terraform apply -auto-approve
-        env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          TF_VAR_client_id: ${{ secrets.AZURE_CLIENT_ID }}
-          TF_VAR_client_secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          TF_VAR_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-          TF_VAR_virtual_machine_admin_username: ${{ secrets.VM_ADMIN_USERNAME }}
-          TF_VAR_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
-
-      - name: Get VM Public IP
+      - name: Get Azure VM Public IP
         id: ip
         working-directory: ./terraform
         run: |
+          terraform init
           echo "PUBLIC_IP=$(terraform output -raw public_ip)" >> $GITHUB_ENV
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -62,11 +37,16 @@ jobs:
       - name: Install Ansible
         run: sudo apt update && sudo apt install -y ansible sshpass
 
-      - name: Copy files to Azure VM
+      - name: Stop old containers
         run: |
-          rsync -avzr -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" ./docker ${{ secrets.VM_ADMIN_USERNAME }}@${{ env.PUBLIC_IP }}:/tmp/
+          cat <<EOF > inventory.ini
+          [remote]
+          ${{ env.PUBLIC_IP }} ansible_user=${{ secrets.VM_ADMIN_USERNAME }} ansible_ssh_private_key_file=~/.ssh/id_rsa
+          EOF
 
-      - name: Run Ansible Playbook
+          ansible-playbook -i inventory.ini ./ansible/stop-playbook.yaml 
+
+      - name: Start new containers
         run: |
           cat <<EOF > inventory.ini
           [remote]
