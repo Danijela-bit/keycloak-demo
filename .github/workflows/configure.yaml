@@ -49,6 +49,10 @@ jobs:
 
           ansible-playbook -i inventory.ini ./ansible/stop-playbook.yaml 
 
+      - name: Copy files to Azure VM
+        run: |
+          rsync -avzr -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" ./docker ${{ secrets.VM_ADMIN_USERNAME }}@${{ env.PUBLIC_IP }}:/tmp/
+
       - name: Start new containers
         run: |
           cat <<EOF > inventory.ini
