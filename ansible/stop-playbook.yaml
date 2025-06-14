@@ -1,6 +1,7 @@
 ---
 - name: Tear down Docker Compose stack and uninstall Docker
   hosts: all
+  become: true
 
   tasks:
     - name: Stop and remove NGINX stack
