@@ -74,7 +74,7 @@ jobs:
         run: |
           cat <<EOF > inventory.ini
           [remote]
-          ${PUBLIC_IP} ansible_user=${SSH_USER} ansible_ssh_private_key_file=~/.ssh/id_rsa
+          ${PUBLIC_IP} ansible_user=${{ secrets.VM_ADMIN_USERNAME }} ansible_ssh_private_key_file=~/.ssh/id_rsa
           EOF
 
           ansible-playbook -i inventory.ini ./ansible/start-playbook.yaml \
