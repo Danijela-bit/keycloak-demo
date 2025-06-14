@@ -194,6 +194,3 @@
           - docker-compose-nginx.yaml
         state: present
         remove_orphans: false
-
-
-
