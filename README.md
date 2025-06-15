@@ -104,7 +104,7 @@ In the Keycloak console (http://<PUBLIC_IP>:8080), go to Clients → nginx-clien
 Once the infrastructure is deployed and containers are running, use the following URLs to verify everything is working correctly:
 - Keycloak Admin Console
   - http://<PUBLIC_IP>:8080
-  - _Login with the KC_BOOTSTRAP_ADMIN_USERNAME and KC_BOOTSTRAP_ADMIN_PASSWORD secrets._
+  - _Login with the KEYCLOAK_ADMIN_USER and KEYCLOAK_ADMIN_PASS secrets._
 
 - Static Web Page (Protected by OAuth2 Proxy)
   - http://<PUBLIC_IP>
