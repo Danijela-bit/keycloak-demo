@@ -79,8 +79,8 @@ jobs:
             --extra-vars "keycloak_admin_pass=${{ secrets.KEYCLOAK_ADMIN_PASS }}" \
             --extra-vars "docker_compose_version=2.36.2" \
             --extra-vars "compose_dir=/opt/app" \
-            --extra-vars "KC_BOOTSTRAP_ADMIN_USERNAME=${{ secrets.KC_BOOTSTRAP_ADMIN_USERNAME }}" \
-            --extra-vars "KC_BOOTSTRAP_ADMIN_PASSWORD=${{ secrets.KC_BOOTSTRAP_ADMIN_PASSWORD }}" \
+            --extra-vars "KC_BOOTSTRAP_ADMIN_USERNAME=${{ secrets.KEYCLOAK_ADMIN_USER }}" \
+            --extra-vars "KC_BOOTSTRAP_ADMIN_PASSWORD=${{ secrets.KEYCLOAK_ADMIN_PASS }}" \
             --extra-vars "KC_DB_USERNAME=${{ secrets.KC_DB_USERNAME }}" \
             --extra-vars "KC_DB_PASSWORD=${{ secrets.KC_DB_PASSWORD }}" \
             --extra-vars "KC_HOSTNAME=${{ env.PUBLIC_IP }}" \
