@@ -47,9 +47,6 @@ services:
     image: redis:7-alpine
     networks:
       - keycloak_net
-
-volumes:
-  pgdata:
   
 networks:
   keycloak_net:
