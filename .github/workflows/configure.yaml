@@ -52,11 +52,6 @@ jobs:
 
       - name: Start new containers
         run: |
-          cat <<EOF > inventory.ini
-          [remote]
-          ${{ env.PUBLIC_IP }} ansible_user=${{ secrets.VM_ADMIN_USERNAME }} ansible_ssh_private_key_file=~/.ssh/id_rsa
-          EOF
-
           ansible-playbook -i inventory.ini ./ansible/start-playbook.yaml \
             --extra-vars "public_ip=${{ env.PUBLIC_IP }}" \
             --extra-vars "keycloak_admin_user=${{ secrets.KEYCLOAK_ADMIN_USER }}" \
