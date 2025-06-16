@@ -109,3 +109,6 @@ Once the infrastructure is deployed and containers are running, use the followin
 - Static Web Page (Protected by OAuth2 Proxy)
   - http://<PUBLIC_IP>
   - _If you're redirected to Keycloak, the setup is working._
+
+### Architecture review
+![Architecture review](https://github.com/user-attachments/assets/ff013947-4fd5-4c64-8f82-6aaa23a05807)
